@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>캠퍼스 네비게이션</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css', v='20260331c') }}">
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="topbar-copy">
+      <h1>캠퍼스 네비게이션</h1>
+      <p>강의실과 편의시설을 빠르게 검색하고, 출발지부터 목적지까지의 도보 경로를 한 화면에서 확인할 수 있습니다.</p>
+    </div>
+    <div class="top-actions">
+      <span class="status-pill">건물 · 강의실 · 편의시설</span>
+      <span class="status-pill soft">OpenStreetMap · Leaflet</span>
+    </div>
+  </header>
+
+  <div class="app">
+    <aside class="panel left-panel">
+      <div class="panel-header compact">
+        <div>
+          <h2 class="panel-title">검색</h2>
+          <p class="panel-subtitle">건물명, 강의실명, 호실코드, 편의시설명 또는 카테고리로 찾을 수 있습니다.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="search-box">
+          <span class="search-icon">⌕</span>
+          <input id="searchInput" class="search-input" type="text" placeholder="예: 원효관, A205, GS25, 카페" />
+        </div>
+
+        <div class="quick-filters" id="quickFilters"></div>
+
+        <div class="summary-strip" id="summaryStrip">
+          <div class="summary-item">
+            <span class="summary-label">건물</span>
+            <strong id="buildingCount">-</strong>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">강의실</span>
+            <strong id="classroomCount">-</strong>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">편의시설</span>
+            <strong id="facilityCount">-</strong>
+          </div>
+        </div>
+
+        <div id="searchResults" class="result-list"></div>
+      </div>
+    </aside>
+
+    <main class="map-panel">
+      <div class="map-toolbar">
+        <div class="map-badge" id="routeBadge">출발지와 목적지를 선택하면 도보 경로를 계산합니다.</div>
+        <div class="toolbar-actions">
+          <button class="btn secondary" id="locateBtn" title="현재 위치 사용">현재 위치</button>
+          <button class="btn secondary" id="focusSelectedBtn">선택 지점 보기</button>
+        </div>
+      </div>
+      <div id="map"></div>
+    </main>
+
+    <aside class="panel right-panel">
+      <div class="panel-header compact">
+        <div>
+          <h2 class="panel-title">경로 정보</h2>
+          <p class="panel-subtitle">실제 이동 편차를 고려해 계산 거리보다 여유 있게 안내합니다.</p>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div class="hero-card">
+          <div class="hero-label">도보 경로 요약</div>
+          <div class="hero-title" id="routeTitle">경로 미선택</div>
+          <div class="metric-grid">
+            <div class="metric-card">
+              <div class="metric-label">보정 거리</div>
+              <div class="metric-value" id="routeDistance">-</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">예상 시간</div>
+              <div class="metric-value" id="routeDuration">-</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="selection-box">
+          <div class="selection-top">
+            <div class="selection-label">출발지</div>
+            <button class="btn ghost" id="useCurrentAsStartBtn">현재 위치 사용</button>
+          </div>
+          <div class="selection-name" id="startName">선택되지 않음</div>
+          <div class="selection-desc" id="startDesc">검색 결과, 건물 마커, 지도 클릭으로 설정할 수 있습니다.</div>
+        </div>
+
+        <div class="selection-box">
+          <div class="selection-top">
+            <div class="selection-label">목적지</div>
+            <button class="btn ghost" id="swapBtn">출발지 ↔ 목적지</button>
+          </div>
+          <div class="selection-name" id="endName">선택되지 않음</div>
+          <div class="selection-desc" id="endDesc">강의실과 편의시설은 연결된 건물 좌표 기준으로 안내됩니다.</div>
+        </div>
+
+        <div class="action-row">
+          <button class="btn secondary" id="clearRouteBtn">경로 초기화</button>
+        </div>
+
+        <div id="detailPanel" class="detail-card">
+          <div class="detail-title">상세 정보</div>
+          <div class="detail-sub">건물이나 검색 결과를 선택하면 관련 강의실과 편의시설 정보를 표시합니다.</div>
+          <div class="empty">아직 선택된 정보가 없습니다.</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="{{ url_for('static', filename='script.js', v='20260331c') }}"></script>
+</body>
+</html>
